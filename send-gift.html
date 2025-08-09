@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>贈り物を送る - ギフトループ</title>
+    <meta
+      name="description"
+      content="ギフトループで贈り物を送る。特別な贈り物を選んで、贈り物の川に流しましょう。"
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Header Section -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <a
+          href="index.html"
+          class="nav-logo"
+          style="text-decoration-line: none"
+        >
+          <i class="fas fa-gift"></i>
+          <span>ギフトループ</span>
+        </a>
+        <ul class="nav-menu">
+          <li><a href="index.html" data-nav="home">ホーム</a></li>
+          <li><a href="shop.html" data-nav="shop">ショップ</a></li>
+          <li><a href="river.html" data-nav="river">贈り物のループ</a></li>
+          <li><a href="send-gift.html" data-nav="send-gift">贈り物を送る</a></li>
+          <li><a href="receive-gift.html" data-nav="receive-gift">贈り物を受け取る</a></li>
+          <li class="user-menu" style="display: none">
+            <a href="mypage.html" class="user-profile">
+              <i class="fas fa-user-circle"></i>
+              <span class="user-name">ユーザー</span>
+            </a>
+            <div class="user-dropdown">
+              <a href="mypage.html"><i class="fas fa-user"></i> マイページ</a>
+              <a href="#" id="logout-btn"
+                ><i class="fas fa-sign-out-alt"></i> ログアウト</a
+              >
+            </div>
+          </li>
+          <li>
+            <a href="auth.html" class="btn-login" id="login-btn">ログイン</a>
+          </li>
+        </ul>
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Send Gift Header -->
+    <section class="send-gift-header">
+      <div class="container">
+        <div class="send-gift-hero">
+          <h1>贈り物を送る</h1>
+          <p>特別な贈り物を選んで、贈り物の川に流しましょう</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Send Gift Content -->
+    <section class="send-gift-content">
+      <div class="container">
+        <div class="send-gift-form">
+          <div class="form-card">
+            <div class="form-header">
+              <h2><i class="fas fa-gift"></i> 贈り物の詳細</h2>
+              <p>贈り物の情報を入力してください</p>
+            </div>
+            
+            <form id="sendGiftForm">
+              <div class="form-group">
+                <label for="giftName">贈り物の名前</label>
+                <input type="text" id="giftName" name="giftName" required placeholder="例: 高級チョコレートセット">
+              </div>
+              
+              <div class="form-group">
+                <label for="giftCategory">カテゴリー</label>
+                <select id="giftCategory" name="giftCategory" required>
+                  <option value="">カテゴリーを選択</option>
+                  <option value="food">食品・スイーツ</option>
+                  <option value="fashion">ファッション</option>
+                  <option value="beauty">美容・コスメ</option>
+                  <option value="electronics">家電・電子機器</option>
+                  <option value="books">書籍・文具</option>
+                  <option value="hobby">趣味・スポーツ</option>
+                  <option value="home">生活用品</option>
+                  <option value="other">その他</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="giftPrice">価格 (円)</label>
+                <input type="number" id="giftPrice" name="giftPrice" required min="100" max="100000" placeholder="1000">
+              </div>
+              
+              <div class="form-group">
+                <label for="giftDescription">説明</label>
+                <textarea id="giftDescription" name="giftDescription" rows="4" placeholder="贈り物の詳細な説明を入力してください"></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label for="giftImage">画像URL (オプション)</label>
+                <input type="url" id="giftImage" name="giftImage" placeholder="https://example.com/image.jpg">
+              </div>
+              
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="isSuper" id="isSuper">
+                  <span class="checkmark"></span>
+                  スーパープレゼントにする (高級な贈り物)
+                </label>
+              </div>
+              
+              <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="window.history.back()">キャンセル</button>
+                <button type="submit" class="btn-primary">
+                  <i class="fas fa-paper-plane"></i> 贈り物を送る
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Gift Preview -->
+        <div class="gift-preview">
+          <h3>プレビュー</h3>
+          <div class="preview-card">
+            <div class="preview-gift-icon">
+              <i class="fas fa-gift" id="previewIcon"></i>
+            </div>
+            <div class="preview-content">
+              <h4 id="previewName">贈り物の名前</h4>
+              <p id="previewDescription">説明がここに表示されます</p>
+              <div class="preview-price">
+                <span>¥<span id="previewPrice">0</span></span>
+              </div>
+              <div class="preview-category">
+                <span id="previewCategory">カテゴリー</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <div class="footer-logo">
+              <i class="fas fa-gift"></i>
+              <span>ギフトループ</span>
+            </div>
+            <p>贈り物の新しい体験を提供するプラットフォーム</p>
+          </div>
+          <div class="footer-section">
+            <h4>サービス</h4>
+            <ul>
+              <li><a href="index.html">ホーム</a></li>
+              <li><a href="shop.html">ショップ</a></li>
+              <li><a href="river.html">贈り物の川</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>会社情報</h4>
+            <ul>
+              <li><a href="about.html">会社概要</a></li>
+              <li><a href="#">プライバシーポリシー</a></li>
+              <li><a href="#">利用規約</a></li>
+              <li><a href="#">お問い合わせ</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>フォローする</h4>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 ギフトループ. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/partials.js"></script>
+    <script src="js/notify.js"></script>
+    <script src="js/core/App.js"></script>
+    <script src="send-gift.js"></script>
+  </body>
+</html> 

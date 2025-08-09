@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>マイページ - ギフトループ</title>
+    <meta
+      name="description"
+      content="ギフトループのマイページ。あなたの贈り物履歴やアカウント設定を管理できます。"
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Header Section -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <a
+          href="index.html"
+          class="nav-logo"
+          style="text-decoration-line: none"
+        >
+          <i class="fas fa-gift"></i>
+          <span>ギフトループ</span>
+        </a>
+        <ul class="nav-menu">
+          <li><a href="index.html" data-nav="home">ホーム</a></li>
+          <li><a href="shop.html" data-nav="shop">ショップ</a></li>
+          <li><a href="river.html" data-nav="river">贈り物のループ</a></li>
+          <li><a href="send-gift.html" data-nav="send-gift">贈り物を送る</a></li>
+          <li><a href="receive-gift.html" data-nav="receive-gift">贈り物を受け取る</a></li>
+          <li class="user-menu" style="display: none">
+            <a href="mypage.html" class="user-profile">
+              <i class="fas fa-user-circle"></i>
+              <span class="user-name">ユーザー</span>
+            </a>
+            <div class="user-dropdown">
+              <a href="mypage.html"><i class="fas fa-user"></i> マイページ</a>
+              <a href="#" id="logout-btn"
+                ><i class="fas fa-sign-out-alt"></i> ログアウト</a
+              >
+            </div>
+          </li>
+          <li>
+            <a href="auth.html" class="btn-login" id="login-btn">ログイン</a>
+          </li>
+        </ul>
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- My Page Header -->
+    <section class="mypage-header">
+      <div class="container">
+        <div class="mypage-hero">
+          <div class="user-profile-card">
+            <div class="profile-avatar">
+              <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="profile-info">
+              <h1 class="profile-name">ユーザー名</h1>
+              <p class="profile-email">user@example.com</p>
+              <div class="membership-badge">
+                <i class="fas fa-crown"></i>
+                <span>ベーシック会員</span>
+              </div>
+            </div>
+            <div class="profile-stats">
+              <div class="stat-item">
+                <span class="stat-number" id="points">100</span>
+                <span class="stat-label">ポイント</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number" id="gifts-received">0</span>
+                <span class="stat-label">受け取り</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number" id="gifts-sent">0</span>
+                <span class="stat-label">送付</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- My Page Content -->
+    <section class="mypage-content">
+      <div class="container">
+        <div class="mypage-tabs">
+          <button class="mypage-tab active" data-tab="overview">
+            <i class="fas fa-home"></i>
+            概要
+          </button>
+          <button class="mypage-tab" data-tab="gifts">
+            <i class="fas fa-gift"></i>
+            贈り物履歴
+          </button>
+          <button class="mypage-tab" data-tab="settings">
+            <i class="fas fa-cog"></i>
+            設定
+          </button>
+          <button class="mypage-tab" data-tab="membership">
+            <i class="fas fa-crown"></i>
+            会員プラン
+          </button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div class="mypage-tab-content active" id="overview-content">
+          <div class="overview-grid">
+            <div class="overview-card">
+              <div class="card-header">
+                <h3><i class="fas fa-chart-line"></i> 最近の活動</h3>
+              </div>
+              <div class="activity-list">
+                <div class="activity-item">
+                  <div class="activity-icon">
+                    <i class="fas fa-gift"></i>
+                  </div>
+                  <div class="activity-content">
+                    <p>新しい贈り物を受け取りました</p>
+                    <span class="activity-time">2時間前</span>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon">
+                    <i class="fas fa-water"></i>
+                  </div>
+                  <div class="activity-content">
+                    <p>贈り物の川に参加しました</p>
+                    <span class="activity-time">1日前</span>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon">
+                    <i class="fas fa-user-plus"></i>
+                  </div>
+                  <div class="activity-content">
+                    <p>ギフトループに参加しました</p>
+                    <span class="activity-time">1週間前</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="overview-card">
+              <div class="card-header">
+                <h3><i class="fas fa-trophy"></i> 実績</h3>
+              </div>
+              <div class="achievements-list">
+                <div class="achievement-item">
+                  <div class="achievement-icon">
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <div class="achievement-content">
+                    <h4>初回参加</h4>
+                    <p>ギフトループに初めて参加しました</p>
+                  </div>
+                </div>
+                <div class="achievement-item locked">
+                  <div class="achievement-icon">
+                    <i class="fas fa-gift"></i>
+                  </div>
+                  <div class="achievement-content">
+                    <h4>贈り物マスター</h4>
+                    <p>10個の贈り物を受け取る</p>
+                  </div>
+                </div>
+                <div class="achievement-item locked">
+                  <div class="achievement-icon">
+                    <i class="fas fa-crown"></i>
+                  </div>
+                  <div class="achievement-content">
+                    <h4>スーパープレゼント</h4>
+                    <p>スーパープレゼントを受け取る</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="overview-card">
+              <div class="card-header">
+                <h3><i class="fas fa-bell"></i> お知らせ</h3>
+              </div>
+              <div class="notifications-list">
+                <div class="notification-item">
+                  <div class="notification-icon">
+                    <i class="fas fa-info-circle"></i>
+                  </div>
+                  <div class="notification-content">
+                    <p>新しい機能が追加されました</p>
+                    <span class="notification-time">3日前</span>
+                  </div>
+                </div>
+                <div class="notification-item">
+                  <div class="notification-icon">
+                    <i class="fas fa-gift"></i>
+                  </div>
+                  <div class="notification-content">
+                    <p>特別な贈り物が川に流れています</p>
+                    <span class="notification-time">1週間前</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gifts Tab -->
+        <div class="mypage-tab-content" id="gifts-content">
+          <div class="gifts-section">
+            <div class="gifts-header">
+              <h2>贈り物履歴</h2>
+              <div class="gifts-filter">
+                <select id="gift-filter">
+                  <option value="all">すべて</option>
+                  <option value="received">受け取り</option>
+                  <option value="sent">送付</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="gifts-grid" id="gifts-grid">
+              <!-- Gift items will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div class="mypage-tab-content" id="settings-content">
+          <div class="settings-section">
+            <div class="settings-card">
+              <h3>プロフィール設定</h3>
+              <form class="profile-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="profile-firstname">姓</label>
+                    <input
+                      type="text"
+                      id="profile-firstname"
+                      name="firstname"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="profile-lastname">名</label>
+                    <input type="text" id="profile-lastname" name="lastname" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="profile-email">メールアドレス</label>
+                  <input type="email" id="profile-email" name="email" />
+                </div>
+                <div class="form-group">
+                  <label for="profile-birthdate">生年月日</label>
+                  <input type="date" id="profile-birthdate" name="birthdate" />
+                </div>
+                <button type="submit" class="btn-primary">
+                  プロフィールを更新
+                </button>
+              </form>
+            </div>
+
+            <div class="settings-card">
+              <h3>パスワード変更</h3>
+              <form class="password-form">
+                <div class="form-group">
+                  <label for="current-password">現在のパスワード</label>
+                  <input
+                    type="password"
+                    id="current-password"
+                    name="current-password"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="new-password">新しいパスワード</label>
+                  <input
+                    type="password"
+                    id="new-password"
+                    name="new-password"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="confirm-new-password"
+                    >新しいパスワード（確認）</label
+                  >
+                  <input
+                    type="password"
+                    id="confirm-new-password"
+                    name="confirm-new-password"
+                  />
+                </div>
+                <button type="submit" class="btn-primary">
+                  パスワードを変更
+                </button>
+              </form>
+            </div>
+
+            <div class="settings-card">
+              <h3>通知設定</h3>
+              <div class="notification-settings">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="email-notifications" checked />
+                  <span class="checkmark"></span>
+                  メール通知を受け取る
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="gift-notifications" checked />
+                  <span class="checkmark"></span>
+                  新しい贈り物のお知らせ
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="newsletter" checked />
+                  <span class="checkmark"></span>
+                  ニュースレターの配信
+                </label>
+              </div>
+              <button class="btn-primary">設定を保存</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Membership Tab -->
+        <div class="mypage-tab-content" id="membership-content">
+          <div class="membership-section">
+            <div class="current-plan">
+              <h2>現在のプラン</h2>
+              <div class="plan-card current">
+                <div class="plan-header">
+                  <h3>ベーシック</h3>
+                  <div class="plan-price">¥0<span>/月</span></div>
+                </div>
+                <ul class="plan-features">
+                  <li><i class="fas fa-check"></i> 基本的な贈り物機能</li>
+                  <li><i class="fas fa-check"></i> 月5回の受け取り権利</li>
+                  <li><i class="fas fa-check"></i> 標準的な商品選択</li>
+                  <li><i class="fas fa-times"></i> スーパープレゼント対象外</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="upgrade-options">
+              <h2>プランアップグレード</h2>
+              <div class="plans-grid">
+                <div class="plan-card upgrade">
+                  <div class="plan-header">
+                    <h3>プレミアム</h3>
+                    <div class="plan-price">¥980<span>/月</span></div>
+                  </div>
+                  <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> 全ての贈り物機能</li>
+                    <li><i class="fas fa-check"></i> 無制限の受け取り権利</li>
+                    <li><i class="fas fa-check"></i> 高級商品選択</li>
+                    <li><i class="fas fa-check"></i> スーパープレゼント対象</li>
+                  </ul>
+                  <button class="btn-upgrade">
+                    プレミアムにアップグレード
+                  </button>
+                </div>
+
+                <div class="plan-card upgrade">
+                  <div class="plan-header">
+                    <h3>ビジネス</h3>
+                    <div class="plan-price">¥2,980<span>/月</span></div>
+                  </div>
+                  <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> 全ての機能</li>
+                    <li><i class="fas fa-check"></i> 優先サポート</li>
+                    <li><i class="fas fa-check"></i> カスタム贈り物</li>
+                    <li><i class="fas fa-check"></i> 分析レポート</li>
+                  </ul>
+                  <button class="btn-upgrade">ビジネスにアップグレード</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+          <div class="footer-content">
+            <div class="footer-section">
+              <div class="footer-logo">
+                <i class="fas fa-gift"></i>
+                <span>ギフトループ</span>
+              </div>
+              <p>贈り物の新しい体験を提供するプラットフォーム</p>
+            </div>
+            <div class="footer-section">
+              <h4>サービス</h4>
+              <ul>
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="shop.html">ショップ</a></li>
+                <li><a href="river.html">贈り物の川</a></li>
+              </ul>
+            </div>
+            <div class="footer-section">
+              <h4>会社情報</h4>
+              <ul>
+                <li><a href="#">プライバシーポリシー</a></li>
+                <li><a href="#">利用規約</a></li>
+                <li><a href="#">お問い合わせ</a></li>
+              </ul>
+            </div>
+            <div class="footer-section">
+              <h4>フォローする</h4>
+              <div class="social-links">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <p>&copy; 2025 ギフトループ. 無断転載を禁じます。.</p>
+          </div>
+        </div>
+    </footer>
+
+    <script src="js/partials.js"></script>
+    <script src="js/notify.js"></script>
+    <script src="js/core/App.js"></script>
+    <script src="mypage.js"></script>
+  </body>
+</html>
