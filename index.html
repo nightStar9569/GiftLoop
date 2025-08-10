@@ -79,21 +79,8 @@
         <div class="hero-visual">
           <div class="gift-river">
             <div class="river-flow">
-              <div class="gift-box floating" style="--delay: 0s">
-                <i class="fas fa-gift"></i>
-              </div>
-              <div class="gift-box floating" style="--delay: 2s">
-                <i class="fas fa-gift"></i>
-              </div>
-              <div class="gift-box floating super-gift" style="--delay: 4s">
-                <i class="fas fa-crown"></i>
-              </div>
-              <div class="gift-box floating" style="--delay: 6s">
-                <i class="fas fa-gift"></i>
-              </div>
-              <div class="gift-box floating" style="--delay: 8s">
-                <i class="fas fa-gift"></i>
-              </div>
+              <div class="river-background-animated"></div>
+              <div class="gift-flow-container" id="heroGiftFlowContainer"></div>
             </div>
           </div>
         </div>
@@ -110,7 +97,7 @@
               <i class="fas fa-user-plus"></i>
             </div>
             <h3>1. 会員登録</h3>
-            <p>簡単な会員登録で、贈り物の川に参加できます。</p>
+            <p>簡単な会員登録でギフトを受け取り、自分もギフトを流そう！プレゼントの川を一緒に楽しもう。</p>
           </div>
           <div class="step">
             <div class="step-icon">
@@ -197,28 +184,11 @@
       <div class="container">
         <h2 class="section-title">実際の体験</h2>
         <div class="demo-container">
-          <div class="demo-visual">
-            <div class="gift-river-demo">
-              <div class="river-background"></div>
-              <div class="gift-flow">
-                <div class="gift-item" data-price="1000">
-                  <div class="gift-box-demo">
-                    <i class="fas fa-gift"></i>
-                    <span class="price">¥1,000</span>
-                  </div>
-                </div>
-                <div class="gift-item" data-price="5000">
-                  <div class="gift-box-demo super">
-                    <i class="fas fa-crown"></i>
-                    <span class="price">¥5,000</span>
-                  </div>
-                </div>
-                <div class="gift-item" data-price="3000">
-                  <div class="gift-box-demo">
-                    <i class="fas fa-gift"></i>
-                    <span class="price">¥3,000</span>
-                  </div>
-                </div>
+          <div class="demo-visual hero-visual">
+            <div class="gift-river">
+              <div class="river-flow">
+                <div class="river-background-animated"></div>
+                <div class="gift-flow-container" id="demoGiftFlowContainer"></div>
               </div>
             </div>
           </div>
