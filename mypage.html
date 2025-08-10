@@ -68,8 +68,10 @@
             <div class="profile-avatar">
               <i class="fas fa-user-circle"></i>
             </div>
-            <div class="profile-info">
-              <h1 class="profile-name">ユーザー名</h1>
+            <div class="profile-info" style="text-align: center;">
+              <h1 class="profile-name" style="font-size:2.2rem; word-break:break-word; max-width:100%; overflow-wrap:break-word;">
+                ユーザー名
+              </h1>
               <p class="profile-email">user@example.com</p>
               <div class="membership-badge">
                 <i class="fas fa-crown"></i>
@@ -78,7 +80,7 @@
             </div>
             <div class="profile-stats">
               <div class="stat-item">
-                <span class="stat-number" id="points">100</span>
+                <span class="stat-number" id="points">500</span>
                 <span class="stat-label">ポイント</span>
               </div>
               <div class="stat-item">
@@ -88,6 +90,10 @@
               <div class="stat-item">
                 <span class="stat-number" id="gifts-sent">0</span>
                 <span class="stat-label">送付</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number" id="corp-gifts-received">0</span>
+                <span class="stat-label">法人ギフト受け取り</span>
               </div>
             </div>
           </div>
@@ -320,11 +326,6 @@
                   <span class="checkmark"></span>
                   新しい贈り物のお知らせ
                 </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="newsletter" checked />
-                  <span class="checkmark"></span>
-                  ニュースレターの配信
-                </label>
               </div>
               <button class="btn-primary">設定を保存</button>
             </div>
@@ -349,41 +350,25 @@
                 </ul>
               </div>
             </div>
-
-            <div class="upgrade-options">
-              <h2>プランアップグレード</h2>
-              <div class="plans-grid">
-                <div class="plan-card upgrade">
-                  <div class="plan-header">
-                    <h3>プレミアム</h3>
-                    <div class="plan-price">¥980<span>/月</span></div>
-                  </div>
-                  <ul class="plan-features">
-                    <li><i class="fas fa-check"></i> 全ての贈り物機能</li>
-                    <li><i class="fas fa-check"></i> 無制限の受け取り権利</li>
-                    <li><i class="fas fa-check"></i> 高級商品選択</li>
-                    <li><i class="fas fa-check"></i> スーパープレゼント対象</li>
-                  </ul>
-                  <button class="btn-upgrade">
-                    プレミアムにアップグレード
-                  </button>
-                </div>
-
-                <div class="plan-card upgrade">
-                  <div class="plan-header">
-                    <h3>ビジネス</h3>
-                    <div class="plan-price">¥2,980<span>/月</span></div>
-                  </div>
-                  <ul class="plan-features">
-                    <li><i class="fas fa-check"></i> 全ての機能</li>
-                    <li><i class="fas fa-check"></i> 優先サポート</li>
-                    <li><i class="fas fa-check"></i> カスタム贈り物</li>
-                    <li><i class="fas fa-check"></i> 分析レポート</li>
-                  </ul>
-                  <button class="btn-upgrade">ビジネスにアップグレード</button>
-                </div>
-              </div>
-            </div>
+          <div style="margin-top: 2rem; text-align: center;">
+            <button
+              class="btn-primary"
+              id="change-plan-btn"
+              style="font-size: 1.1rem; padding: 0.8em 2.2em; margin-top: 1em;"
+            >
+              プランを変更する
+            </button>
+          </div>
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              var changePlanBtn = document.getElementById('change-plan-btn');
+              if (changePlanBtn) {
+                changePlanBtn.addEventListener('click', function() {
+                  window.location.href = 'index.html#pricing';
+                });
+              }
+            });
+          </script>
           </div>
         </div>
       </div>

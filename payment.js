@@ -32,6 +32,17 @@
     if (form) {
       form.addEventListener('submit', (e) => {
         e.preventDefault();
+        // Require login before payment
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        if (!isLoggedIn) {
+          if (window.app && typeof window.app.showNotification === 'function') {
+            window.app.showNotification('ログインが必要です。ログインページに移動します。', 'info');
+          }
+          setTimeout(() => {
+            window.location.href = 'auth.html';
+          }, 600);
+          return;
+        }
         // Very simple mock validation
         const inputs = form.querySelectorAll('input[required]');
         for (const input of inputs) {

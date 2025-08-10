@@ -69,9 +69,16 @@ function loadUserData() {
     const pointsElement = document.getElementById('points');
     const giftsReceivedElement = document.getElementById('gifts-received');
     const giftsSentElement = document.getElementById('gifts-sent');
+    const corpGiftsReceivedElement = document.getElementById('corp-gifts-received');
+
+    // Determine points by authority (membership)
+    const level = (userData.membershipLevel || 'basic').toLowerCase();
+    const levelPoints = level === 'business' ? 1500 : level === 'premium' ? 1000 : 500;
+    userData.points = levelPoints;
+    localStorage.setItem('userData', JSON.stringify(userData));
     
     if (pointsElement) {
-        pointsElement.textContent = userData.points || 100;
+        pointsElement.textContent = levelPoints.toLocaleString();
     }
     
     if (giftsReceivedElement) {
@@ -81,10 +88,13 @@ function loadUserData() {
     if (giftsSentElement) {
         giftsSentElement.textContent = userData.giftsSent || 0;
     }
+
+    if (corpGiftsReceivedElement) {
+        corpGiftsReceivedElement.textContent = userData.corporateGiftsReceived || 0;
+    }
     
     // Update membership level badge
     const membershipBadge = document.querySelector('.membership-badge span');
-    const level = userData.membershipLevel || 'basic';
     const levelText = {
         'basic': 'ベーシック会員',
         'premium': 'プレミアム会員',
@@ -101,6 +111,34 @@ function loadUserData() {
     if (currentPlanPriceEl) {
         const priceDisplay = (level === 'premium' || level === 'business') ? `¥${Number(subscriptionPrice || '0').toLocaleString()}<span>/月</span>` : '¥0<span>/月</span>';
         currentPlanPriceEl.innerHTML = priceDisplay;
+    }
+    // Update current plan features list
+    const currentPlanFeaturesEl = document.querySelector('.plan-card.current .plan-features');
+    if (currentPlanFeaturesEl) {
+        const featuresByLevel = {
+            basic: [
+                { text: '基本的な贈り物機能', ok: true },
+                { text: '月5回の受け取り権利', ok: true },
+                { text: '標準的な商品選択', ok: true },
+                { text: 'スーパープレゼント対象外', ok: false }
+            ],
+            premium: [
+                { text: '全ての贈り物機能', ok: true },
+                { text: '無制限の受け取り権利', ok: true },
+                { text: '高級商品選択', ok: true },
+                { text: 'スーパープレゼント対象', ok: true }
+            ],
+            business: [
+                { text: '全ての機能', ok: true },
+                { text: '優先サポート', ok: true },
+                { text: 'カスタム贈り物', ok: true },
+                { text: '分析レポート', ok: true }
+            ]
+        };
+        const features = featuresByLevel[level] || featuresByLevel.basic;
+        currentPlanFeaturesEl.innerHTML = features.map(f => `
+            <li><i class="fas ${f.ok ? 'fa-check' : 'fa-times'}"></i> ${f.text}</li>
+        `).join('');
     }
     
     // Populate profile form
