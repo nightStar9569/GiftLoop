@@ -17,219 +17,377 @@ document.addEventListener('DOMContentLoaded', function() {
         loginBtn.style.display = 'none';
     }
 
-    // Initialize form
-    initializeForm();
-    
-    // Initialize preview
-    initializePreview();
+    // Initialize new selection flow
+    initOwnedGifts();
+    initRecipientSelection();
+    initSendAction();
 });
 
-// Initialize form functionality
-function initializeForm() {
-    const form = document.getElementById('sendGiftForm');
-    if (form) {
-        form.addEventListener('submit', handleFormSubmit);
+function initOwnedGifts() {
+    const listEl = document.getElementById('ownedGiftsList');
+    const searchEl = document.getElementById('ownedGiftsSearch');
+    const filtersEl = document.getElementById('ownedGiftsFilters');
+    const sortEl = document.getElementById('ownedGiftsSort');
+    if (!listEl) return;
+
+    const allGifts = getOwnedGifts();
+    let filtered = [...allGifts];
+
+    const categories = [
+        { key: 'all', label: 'すべて' },
+        { key: 'food', label: '食品・スイーツ' },
+        { key: 'fashion', label: 'ファッション' },
+        { key: 'beauty', label: '美容・コスメ' },
+        { key: 'electronics', label: '家電・電子機器' },
+        { key: 'books', label: '書籍・文具' },
+        { key: 'hobby', label: '趣味・スポーツ' },
+        { key: 'home', label: '生活用品' },
+        { key: 'other', label: 'その他' },
+    ];
+
+    let activeCategory = 'all';
+    let activeSort = 'recommended';
+
+    function renderFilters() {
+        if (!filtersEl) return;
+        filtersEl.innerHTML = '';
+        categories.forEach(cat => {
+            const chip = document.createElement('button');
+            chip.type = 'button';
+            chip.className = 'chip' + (cat.key === activeCategory ? ' active' : '');
+            chip.textContent = cat.label;
+            chip.setAttribute('data-category', cat.key);
+            chip.addEventListener('click', () => {
+                activeCategory = cat.key;
+                applyFiltersAndSort();
+                renderFilters();
+            });
+            filtersEl.appendChild(chip);
+        });
     }
+
+    function applyFiltersAndSort() {
+        const q = (searchEl?.value || '').trim().toLowerCase();
+        filtered = allGifts.filter(g => {
+            const matchQuery = !q || g.name.toLowerCase().includes(q) || getCategoryText(g.category).toLowerCase().includes(q);
+            const matchCategory = activeCategory === 'all' || g.category === activeCategory;
+            return matchQuery && matchCategory;
+        });
+
+        switch (activeSort) {
+            case 'latest':
+                filtered.sort((a, b) => new Date(b.createdAt || b.receivedAt || 0) - new Date(a.createdAt || a.receivedAt || 0));
+                break;
+            case 'price_asc':
+                filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
+                break;
+            case 'price_desc':
+                filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
+                break;
+            case 'name_asc':
+                filtered.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+                break;
+            case 'recommended':
+            default:
+                filtered.sort((a, b) => Number(Boolean(b.isSuper)) - Number(Boolean(a.isSuper)) || (b.price || 0) - (a.price || 0));
+        }
+        render(filtered);
+    }
+
+    function render(items) {
+        listEl.innerHTML = '';
+        if (items.length === 0) {
+            listEl.innerHTML = `
+                <div style="padding:1.25rem; background:#f9fafb; border:1px dashed #e5e7eb; border-radius:12px; text-align:center; color:#374151;">
+                  <div style="font-weight:700; margin-bottom:.25rem;">所有している贈り物がありません</div>
+                  <div style="color:#6b7280; margin-bottom:.75rem;">ショップで新しい贈り物を購入してみましょう。</div>
+                  <a href="shop.html" class="btn-primary" style="text-decoration:none;">
+                    ショップへ移動
+                  </a>
+                </div>`;
+            disableSendButton();
+            updatePreview(null);
+            return;
+        }
+        items.forEach(gift => {
+            const row = document.createElement('button');
+            row.type = 'button';
+            row.className = 'owned-gift-row';
+            row.style.cssText = 'display:flex; align-items:center; gap:.75rem; padding:.75rem 1rem; border:1px solid #e5e7eb; border-radius:10px; background:#fff; text-align:left; cursor:pointer;';
+            row.innerHTML = `
+                <div class="icon" style="width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:#f3f4f6; color:${gift.isSuper ? '#ffd700' : '#e91e63'};">
+                    <i class="fas ${gift.isSuper ? 'fa-crown' : 'fa-gift'}"></i>
+                </div>
+                <div style="flex:1; min-width:0;">
+                    <div style="font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${gift.name}</div>
+                    <div style="font-size:.9rem; color:#6b7280;">¥${(gift.price||0).toLocaleString()} ・ ${getCategoryText(gift.category)}</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:.5rem; color:#111827;">
+                    <span class="badge" style="display:${gift.isSuper ? 'inline-flex' : 'none'}; align-items:center; gap:.25rem; padding:.2rem .5rem; border-radius:9999px; background:#fff7cc; color:#7a5d00; border:1px solid #ffec87; font-size:.75rem;"> <i class="fas fa-star"></i> SUPER</span>
+                    <div style="font-weight:700;">選択</div>
+                </div>
+            `;
+            row.addEventListener('click', () => {
+                setSelectedGift(gift);
+                updatePreview(gift);
+                enableSendButtonIfReady();
+                highlightSelected(row);
+            });
+            listEl.appendChild(row);
+        });
+    }
+
+    function highlightSelected(activeRow) {
+        listEl.querySelectorAll('.owned-gift-row').forEach(el => {
+            el.style.borderColor = '#e5e7eb';
+        });
+        if (activeRow) activeRow.style.borderColor = '#e91e63';
+    }
+
+    if (searchEl) {
+        searchEl.addEventListener('input', applyFiltersAndSort);
+    }
+    if (sortEl) {
+        sortEl.addEventListener('change', () => {
+            activeSort = sortEl.value;
+            applyFiltersAndSort();
+        });
+    }
+
+    renderFilters();
+    applyFiltersAndSort();
 }
 
-// Initialize preview functionality
-function initializePreview() {
-    const giftName = document.getElementById('giftName');
-    const giftDescription = document.getElementById('giftDescription');
-    const giftPrice = document.getElementById('giftPrice');
-    const giftCategory = document.getElementById('giftCategory');
-    const isSuper = document.getElementById('isSuper');
-
-    // Update preview when form fields change
-    if (giftName) {
-        giftName.addEventListener('input', updatePreview);
-    }
-    if (giftDescription) {
-        giftDescription.addEventListener('input', updatePreview);
-    }
-    if (giftPrice) {
-        giftPrice.addEventListener('input', updatePreview);
-    }
-    if (giftCategory) {
-        giftCategory.addEventListener('change', updatePreview);
-    }
-    if (isSuper) {
-        isSuper.addEventListener('change', updatePreview);
-    }
+function getOwnedGifts() {
+    // Owned gifts: gifts received (status accepted) plus user-created gifts not yet sent or available
+    const user = JSON.parse(localStorage.getItem('userData') || '{}');
+    const gifts = JSON.parse(localStorage.getItem('gifts') || '[]');
+    // Consider gifts received by user
+    const received = gifts.filter(g => g.status === 'accepted' && g.receiverId === user.id);
+    // Consider gifts the user previously added and are unsent/in inventory (status 'owned')
+    const owned = gifts.filter(g => g.status === 'owned' && g.ownerId === user.id);
+    // Fallback: also allow gifts the user created and are pending for river (status 'sent' but senderId is user) — optional
+    const created = gifts.filter(g => g.status === 'created' && g.ownerId === user.id);
+    const list = [...received, ...owned, ...created];
+    // De-duplicate by id
+    const map = new Map();
+    list.forEach(g => map.set(g.id, g));
+    return Array.from(map.values());
 }
 
-// Update preview
-function updatePreview() {
-    const giftName = document.getElementById('giftName').value || '贈り物の名前';
-    const giftDescription = document.getElementById('giftDescription').value || '説明がここに表示されます';
-    const giftPrice = document.getElementById('giftPrice').value || '0';
-    const giftCategory = document.getElementById('giftCategory');
-    const isSuper = document.getElementById('isSuper').checked;
+function initRecipientSelection() {
+    const nameEl = document.getElementById('recipientName');
+    const emailEl = document.getElementById('recipientEmail');
+    const summaryEl = document.getElementById('recipientSummary');
+    const suggestionsEl = document.getElementById('contactSuggestions');
 
-    // Update preview elements
+    const contacts = getRecentContacts();
+
+    function updateSummary() {
+        const { name, email } = getRecipient();
+        if (summaryEl) {
+            summaryEl.textContent = (name || email) ? `受取人: ${name ? name : ''}${name && email ? ' / ' : ''}${email ? email : ''}` : '';
+        }
+        if (suggestionsEl) {
+            const q = (nameEl?.value || emailEl?.value || '').trim().toLowerCase();
+            if (!q) {
+                suggestionsEl.style.display = 'none';
+                suggestionsEl.innerHTML = '';
+            } else {
+                const matches = contacts.filter(c => (c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q))).slice(0, 5);
+                if (matches.length) {
+                    suggestionsEl.style.display = 'block';
+                    suggestionsEl.innerHTML = `
+                        <div style="display:flex; flex-direction:column; gap:.5rem; background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:.5rem;">
+                            ${matches.map(m => `
+                                <button type="button" class="contact-suggestion" style="display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .75rem; border-radius:8px; border:1px solid transparent; background:#fff; cursor:pointer;">
+                                    <span><strong>${m.name}</strong> <span style="color:#6b7280;">${m.email}</span></span>
+                                    <i class="fas fa-plus" style="color:#e91e63;"></i>
+                                </button>
+                            `).join('')}
+                        </div>
+                    `;
+                    Array.from(suggestionsEl.querySelectorAll('.contact-suggestion')).forEach((btn, idx) => {
+                        btn.addEventListener('click', () => {
+                            const selected = matches[idx];
+                            if (nameEl) nameEl.value = selected.name;
+                            if (emailEl) emailEl.value = selected.email;
+                            updateSummary();
+                            enableSendButtonIfReady();
+                            suggestionsEl.style.display = 'none';
+                        });
+                    });
+                } else {
+                    suggestionsEl.style.display = 'none';
+                    suggestionsEl.innerHTML = '';
+                }
+            }
+        }
+    }
+
+    function onChange() {
+        updateSummary();
+        enableSendButtonIfReady();
+    }
+
+    if (nameEl) nameEl.addEventListener('input', onChange);
+    if (emailEl) emailEl.addEventListener('input', onChange);
+
+    updateSummary();
+}
+
+function getRecentContacts() {
+    // Simple recent contacts sourced from previous sent gifts
+    const gifts = JSON.parse(localStorage.getItem('gifts') || '[]');
+    const contactsMap = new Map();
+    for (const g of gifts) {
+        if (g.recipientEmail || g.recipientName) {
+            const key = (g.recipientEmail || g.recipientName).toLowerCase();
+            if (!contactsMap.has(key)) {
+                contactsMap.set(key, { name: g.recipientName || '名前なし', email: g.recipientEmail || '' });
+            }
+        }
+    }
+    return Array.from(contactsMap.values()).slice(0, 10);
+}
+
+function initSendAction() {
+    const btn = document.getElementById('sendSelectedGiftBtn');
+    const modal = document.getElementById('sendConfirmModal');
+    const backdrop = modal?.querySelector('.modal-backdrop');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const cancelBtn = document.getElementById('cancelModalBtn');
+    const confirmBtn = document.getElementById('confirmSendBtn');
+    const modalGiftName = document.getElementById('modalGiftName');
+    const modalRecipient = document.getElementById('modalRecipient');
+
+    if (!btn) return;
+
+    function openModal() {
+        const gift = getSelectedGift();
+        const { name, email } = getRecipient();
+        if (modalGiftName) modalGiftName.textContent = gift?.name || '-';
+        if (modalRecipient) modalRecipient.textContent = (name || email) ? `${name ? name : ''}${name && email ? ' / ' : ''}${email ? email : ''}` : '-';
+        modal?.classList.add('show');
+        modal?.setAttribute('aria-hidden', 'false');
+    }
+    function closeModal() {
+        modal?.classList.remove('show');
+        modal?.setAttribute('aria-hidden', 'true');
+    }
+
+    btn.addEventListener('click', () => {
+        const gift = getSelectedGift();
+        const { name, email } = getRecipient();
+        if (!gift) {
+            showNotification('贈り物を選択してください。', 'error');
+            return;
+        }
+        if (!name && !email) {
+            showNotification('受取人の名前またはメールアドレスを入力してください。', 'error');
+            return;
+        }
+        openModal();
+    });
+
+    backdrop?.addEventListener('click', closeModal);
+    closeBtn?.addEventListener('click', closeModal);
+    cancelBtn?.addEventListener('click', closeModal);
+
+    confirmBtn?.addEventListener('click', () => {
+        const gift = getSelectedGift();
+        const { name, email } = getRecipient();
+        closeModal();
+        showNotification('贈り物を送信中...', 'info');
+        setTimeout(() => {
+            markGiftAsSent(gift, { name, email });
+            showNotification('贈り物を送信しました！', 'success');
+            setTimeout(() => {
+                window.location.href = 'river.html';
+            }, 1200);
+        }, 800);
+    });
+}
+
+function enableSendButtonIfReady() {
+    const btn = document.getElementById('sendSelectedGiftBtn');
+    if (!btn) return;
+    const gift = getSelectedGift();
+    const { name, email } = getRecipient();
+    btn.disabled = !(gift && (name || email));
+}
+function disableSendButton() {
+    const btn = document.getElementById('sendSelectedGiftBtn');
+    if (btn) btn.disabled = true;
+}
+
+function getRecipient() {
+    const nameEl = document.getElementById('recipientName');
+    const emailEl = document.getElementById('recipientEmail');
+    return { name: (nameEl?.value || '').trim(), email: (emailEl?.value || '').trim() };
+}
+
+function setSelectedGift(gift) {
+    sessionStorage.setItem('selectedGiftToSend', JSON.stringify(gift));
+}
+function getSelectedGift() {
+    const raw = sessionStorage.getItem('selectedGiftToSend');
+    return raw ? JSON.parse(raw) : null;
+}
+
+function updatePreview(gift) {
     const previewName = document.getElementById('previewName');
-    const previewDescription = document.getElementById('previewDescription');
     const previewPrice = document.getElementById('previewPrice');
     const previewCategory = document.getElementById('previewCategory');
     const previewIcon = document.getElementById('previewIcon');
-
-    if (previewName) previewName.textContent = giftName;
-    if (previewDescription) previewDescription.textContent = giftDescription;
-    if (previewPrice) previewPrice.textContent = giftPrice;
-    
-    // Update category
-    if (previewCategory && giftCategory) {
-        const categoryText = giftCategory.options[giftCategory.selectedIndex]?.text || 'カテゴリー';
-        previewCategory.textContent = categoryText;
-    }
-
-    // Update icon for super gift
-    if (previewIcon) {
-        if (isSuper) {
-            previewIcon.className = 'fas fa-crown';
-            previewIcon.style.color = '#ffd700';
-        } else {
-            previewIcon.className = 'fas fa-gift';
-            previewIcon.style.color = '#e91e63';
-        }
-    }
-}
-
-// Handle form submission
-function handleFormSubmit(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(e.target);
-    const giftData = {
-        id: generateGiftId(),
-        name: formData.get('giftName'),
-        category: formData.get('giftCategory'),
-        price: parseInt(formData.get('giftPrice')),
-        description: formData.get('giftDescription'),
-        imageUrl: formData.get('giftImage') || null,
-        isSuper: formData.get('isSuper') === 'on',
-        senderId: JSON.parse(localStorage.getItem('userData') || '{}').id,
-        senderName: JSON.parse(localStorage.getItem('userData') || '{}').firstName,
-        createdAt: new Date().toISOString(),
-        status: 'sent'
-    };
-
-    // Validate form
-    if (!validateGiftData(giftData)) {
+    if (!previewName || !previewPrice || !previewCategory || !previewIcon) return;
+    if (!gift) {
+        previewName.textContent = '贈り物が未選択です';
+        previewPrice.textContent = '0';
+        previewCategory.textContent = 'カテゴリー';
+        previewIcon.className = 'fas fa-gift';
+        previewIcon.style.color = '#e91e63';
         return;
     }
-
-    // Show loading
-    showNotification('贈り物を送信中...', 'info');
-
-    // Simulate API call
-    setTimeout(() => {
-        // Save gift to localStorage (in a real app, this would be sent to a server)
-        saveGiftToStorage(giftData);
-        
-        // Update user stats
-        updateUserStats();
-        
-        // Show success message
-        showNotification('贈り物が正常に送信されました！', 'success');
-        
-        // Redirect to river page after a short delay
-        setTimeout(() => {
-            window.location.href = 'river.html';
-        }, 2000);
-    }, 1500);
+    previewName.textContent = gift.name;
+    previewPrice.textContent = gift.price?.toLocaleString?.() || String(gift.price || '0');
+    previewCategory.textContent = getCategoryText(gift.category);
+    previewIcon.className = `fas ${gift.isSuper ? 'fa-crown' : 'fa-gift'}`;
+    previewIcon.style.color = gift.isSuper ? '#ffd700' : '#e91e63';
 }
 
-// Validate gift data
-function validateGiftData(giftData) {
-    if (!giftData.name || giftData.name.trim().length < 2) {
-        showNotification('贈り物の名前を入力してください（2文字以上）', 'error');
-        return false;
-    }
-    
-    if (!giftData.category) {
-        showNotification('カテゴリーを選択してください', 'error');
-        return false;
-    }
-    
-    if (!giftData.price || giftData.price < 100 || giftData.price > 100000) {
-        showNotification('価格は100円から100,000円の間で入力してください', 'error');
-        return false;
-    }
-    
-    if (!giftData.description || giftData.description.trim().length < 10) {
-        showNotification('説明を入力してください（10文字以上）', 'error');
-        return false;
-    }
-    
-    return true;
-}
-
-// Generate unique gift ID
-function generateGiftId() {
-    return 'gift_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-}
-
-// Save gift to localStorage
-function saveGiftToStorage(giftData) {
+function markGiftAsSent(gift, recipient) {
     const gifts = JSON.parse(localStorage.getItem('gifts') || '[]');
-    gifts.push(giftData);
+    const user = JSON.parse(localStorage.getItem('userData') || '{}');
+    const idx = gifts.findIndex(g => g.id === gift.id);
+    const updated = { ...gift, status: 'sent', senderId: user.id, senderName: user.firstName || 'ユーザー', sentAt: new Date().toISOString(), recipientName: recipient.name || null, recipientEmail: recipient.email || null };
+    if (idx >= 0) gifts[idx] = updated; else gifts.push(updated);
     localStorage.setItem('gifts', JSON.stringify(gifts));
+    // update user stats
+    const u = { ...user, giftsSent: (user.giftsSent || 0) + 1 };
+    localStorage.setItem('userData', JSON.stringify(u));
 }
 
-// Update user stats
-function updateUserStats() {
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-    userData.giftsSent = (userData.giftsSent || 0) + 1;
-    localStorage.setItem('userData', JSON.stringify(userData));
+// Helpers
+function getCategoryText(category) {
+    const categories = {
+        food: '食品・スイーツ',
+        fashion: 'ファッション',
+        beauty: '美容・コスメ',
+        electronics: '家電・電子機器',
+        books: '書籍・文具',
+        hobby: '趣味・スポーツ',
+        home: '生活用品',
+        other: 'その他'
+    };
+    return categories[category] || 'その他';
 }
 
-// Show notification (if function exists)
+// Notification helper
 function showNotification(message, type = 'info') {
     if (typeof window.showNotification === 'function') {
         window.showNotification(message, type);
-    } else {
-        // Fallback notification
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.innerHTML = `
-            <div class="notification-content">
-                <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-                <span>${message}</span>
-            </div>
-        `;
-        
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#e91e63'};
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            z-index: 10000;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-            font-weight: 600;
-            max-width: 300px;
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Animate in
-        setTimeout(() => {
-            notification.style.transform = 'translateX(0)';
-        }, 100);
-        
-        // Remove after 4 seconds
-        setTimeout(() => {
-            notification.style.transform = 'translateX(400px)';
-            setTimeout(() => {
-                if (document.body.contains(notification)) {
-                    document.body.removeChild(notification);
-                }
-            }, 300);
-        }, 4000);
+    } else if (window.app && typeof window.app.showNotification === 'function') {
+        window.app.showNotification(message, type);
     }
 } 

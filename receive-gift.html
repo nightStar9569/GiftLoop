@@ -61,7 +61,7 @@
     </nav>
 
     <!-- Receive Gift Header -->
-    <section class="receive-gift-header">
+    <section class="receive-gift-header" style="margin-top: 4.5rem;">
       <div class="container">
         <div class="receive-gift-hero">
           <h1>贈り物を受け取る</h1>
@@ -105,7 +105,7 @@
           </div>
           
           <div class="gift-actions">
-            <button class="btn-secondary" id="rejectGift">
+            <button class="btn-primary" id="rejectGift">
               <i class="fas fa-times"></i> 拒否する
             </button>
             <button class="btn-primary" id="acceptGift">
@@ -131,6 +131,43 @@
         </div>
       </div>
     </section>
+
+    <!-- Confirm Modals -->
+    <div id="acceptConfirmModal" class="modal" aria-hidden="true">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="acceptModalTitle">
+        <div class="modal-header">
+          <h3 id="acceptModalTitle"><i class="fas fa-heart"></i> この贈り物を受け取りますか？</h3>
+          <button class="modal-close" id="closeAcceptModal" aria-label="閉じる"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-row"><span>贈り物</span><strong id="acceptModalGiftName">-</strong></div>
+          <div class="modal-row"><span>送信者</span><strong id="acceptModalSender">-</strong></div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-primary" id="cancelAcceptBtn">キャンセル</button>
+          <button class="btn-primary" id="confirmAcceptBtn"><i class="fas fa-heart"></i> 受け取る</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="rejectConfirmModal" class="modal" aria-hidden="true">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="rejectModalTitle">
+        <div class="modal-header">
+          <h3 id="rejectModalTitle"><i class="fas fa-times"></i> この贈り物を拒否しますか？</h3>
+          <button class="modal-close" id="closeRejectModal" aria-label="閉じる"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-row"><span>贈り物</span><strong id="rejectModalGiftName">-</strong></div>
+          <div class="modal-row"><span>送信者</span><strong id="rejectModalSender">-</strong></div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-primary" id="cancelRejectBtn">キャンセル</button>
+          <button class="btn-primary" id="confirmRejectBtn"><i class="fas fa-times"></i> 拒否する</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Footer Section -->
     <footer class="footer">

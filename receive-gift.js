@@ -162,13 +162,72 @@ function initializeActions() {
     const acceptGift = document.getElementById('acceptGift');
     const rejectGift = document.getElementById('rejectGift');
 
+    // Modal elements
+    const acceptModal = document.getElementById('acceptConfirmModal');
+    const rejectModal = document.getElementById('rejectConfirmModal');
+    const closeAcceptModal = document.getElementById('closeAcceptModal');
+    const closeRejectModal = document.getElementById('closeRejectModal');
+    const cancelAcceptBtn = document.getElementById('cancelAcceptBtn');
+    const cancelRejectBtn = document.getElementById('cancelRejectBtn');
+    const confirmAcceptBtn = document.getElementById('confirmAcceptBtn');
+    const confirmRejectBtn = document.getElementById('confirmRejectBtn');
+    const acceptGiftName = document.getElementById('acceptModalGiftName');
+    const acceptSender = document.getElementById('acceptModalSender');
+    const rejectGiftName = document.getElementById('rejectModalGiftName');
+    const rejectSender = document.getElementById('rejectModalSender');
+
+    function openModal(modal) {
+        modal?.classList.add('show');
+        modal?.setAttribute('aria-hidden', 'false');
+    }
+    function closeModal(modal) {
+        modal?.classList.remove('show');
+        modal?.setAttribute('aria-hidden', 'true');
+    }
+
     if (acceptGift) {
-        acceptGift.addEventListener('click', handleAcceptGift);
+        acceptGift.addEventListener('click', () => {
+            const gift = window.currentGift;
+            if (!gift) {
+                showNotification('贈り物の情報が見つかりません。', 'error');
+                return;
+            }
+            if (acceptGiftName) acceptGiftName.textContent = gift.name || '-';
+            if (acceptSender) acceptSender.textContent = gift.senderName || '匿名';
+            openModal(acceptModal);
+        });
     }
 
     if (rejectGift) {
-        rejectGift.addEventListener('click', handleRejectGift);
+        rejectGift.addEventListener('click', () => {
+            const gift = window.currentGift;
+            if (!gift) {
+                showNotification('贈り物の情報が見つかりません。', 'error');
+                return;
+            }
+            if (rejectGiftName) rejectGiftName.textContent = gift.name || '-';
+            if (rejectSender) rejectSender.textContent = gift.senderName || '匿名';
+            openModal(rejectModal);
+        });
     }
+
+    // Close/cancel handlers
+    closeAcceptModal?.addEventListener('click', () => closeModal(acceptModal));
+    closeRejectModal?.addEventListener('click', () => closeModal(rejectModal));
+    cancelAcceptBtn?.addEventListener('click', () => closeModal(acceptModal));
+    cancelRejectBtn?.addEventListener('click', () => closeModal(rejectModal));
+    acceptModal?.querySelector('.modal-backdrop')?.addEventListener('click', () => closeModal(acceptModal));
+    rejectModal?.querySelector('.modal-backdrop')?.addEventListener('click', () => closeModal(rejectModal));
+
+    // Confirm handlers use existing flows
+    confirmAcceptBtn?.addEventListener('click', () => {
+        closeModal(acceptModal);
+        handleAcceptGift();
+    });
+    confirmRejectBtn?.addEventListener('click', () => {
+        closeModal(rejectModal);
+        handleRejectGift();
+    });
 }
 
 // Handle accept gift
@@ -230,13 +289,27 @@ function handleRejectGift() {
 // Update gift status
 function updateGiftStatus(giftId, status) {
     const gifts = JSON.parse(localStorage.getItem('gifts') || '[]');
+    const user = JSON.parse(localStorage.getItem('userData') || '{}');
     const giftIndex = gifts.findIndex(g => g.id === giftId);
     
     if (giftIndex !== -1) {
         gifts[giftIndex].status = status;
+        if (status === 'accepted') {
+            gifts[giftIndex].receiverId = user.id;
+            gifts[giftIndex].ownerId = user.id;
+        }
         gifts[giftIndex].receivedAt = new Date().toISOString();
-        localStorage.setItem('gifts', JSON.stringify(gifts));
+    } else if (status === 'accepted' && window.currentGift) {
+        const acceptedGift = {
+            ...window.currentGift,
+            status: 'accepted',
+            receiverId: user.id,
+            ownerId: user.id,
+            receivedAt: new Date().toISOString()
+        };
+        gifts.push(acceptedGift);
     }
+    localStorage.setItem('gifts', JSON.stringify(gifts));
 }
 
 // Update user stats
