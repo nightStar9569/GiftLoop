@@ -34,8 +34,14 @@
           <li><a href="index.html" data-nav="home">ホーム</a></li>
           <li><a href="shop.html" data-nav="shop">ショップ</a></li>
           <li><a href="river.html" data-nav="river">贈り物のループ</a></li>
-          <li><a href="send-gift.html" data-nav="send-gift">贈り物を送る</a></li>
-          <li><a href="receive-gift.html" data-nav="receive-gift">贈り物を受け取る</a></li>
+          <li>
+            <a href="send-gift.html" data-nav="send-gift">贈り物を送る</a>
+          </li>
+          <li>
+            <a href="receive-gift.html" data-nav="receive-gift"
+              >贈り物を受け取る</a
+            >
+          </li>
           <li class="user-menu" style="display: none">
             <a href="mypage.html" class="user-profile">
               <i class="fas fa-user-circle"></i>
@@ -68,8 +74,16 @@
             <div class="profile-avatar">
               <i class="fas fa-user-circle"></i>
             </div>
-            <div class="profile-info" style="text-align: center;">
-              <h1 class="profile-name" style="font-size:2.2rem; word-break:break-word; max-width:100%; overflow-wrap:break-word;">
+            <div class="profile-info" style="text-align: center">
+              <h1
+                class="profile-name"
+                style="
+                  font-size: 2.2rem;
+                  word-break: break-word;
+                  max-width: 100%;
+                  overflow-wrap: break-word;
+                "
+              >
                 ユーザー名
               </h1>
               <p class="profile-email">user@example.com</p>
@@ -249,7 +263,14 @@
           <div class="settings-section">
             <div class="settings-card">
               <h3>プロフィール設定</h3>
-              <form class="profile-form">
+              <form
+                class="profile-form"
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                "
+              >
                 <div class="form-row">
                   <div class="form-group">
                     <label for="profile-firstname">姓</label>
@@ -315,19 +336,37 @@
 
             <div class="settings-card">
               <h3>通知設定</h3>
-              <div class="notification-settings">
-                <label class="checkbox-label">
-                  <input type="checkbox" name="email-notifications" checked />
-                  <span class="checkmark"></span>
-                  メール通知を受け取る
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="gift-notifications" checked />
-                  <span class="checkmark"></span>
-                  新しい贈り物のお知らせ
-                </label>
+              <div class="notification" style="display: flex;flex-direction: column;align-items: center;">
+                <div
+                  class="notification-settings"
+                  style="
+                    display: flex;
+                    align-items: flex-start;
+                    flex-direction: column;
+                  "
+                >
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="email-notifications" checked />
+                    <span class="checkmark"></span>
+                    メール通知を受け取る
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="gift-notifications" checked />
+                    <span class="checkmark"></span>
+                    新しい贈り物のお知らせ
+                  </label>
+                </div>
               </div>
-              <button class="btn-primary">設定を保存</button>
+              <div
+                class="saveSetting"
+                style="
+                  text-align: center;
+                  display: flex;
+                  justify-content: center;
+                "
+              >
+                <button class="btn-primary">設定を保存</button>
+              </div>
             </div>
           </div>
         </div>
@@ -350,25 +389,25 @@
                 </ul>
               </div>
             </div>
-          <div style="margin-top: 2rem; text-align: center;">
-            <button
-              class="btn-primary"
-              id="change-plan-btn"
-              style="font-size: 1.1rem; padding: 0.8em 2.2em; margin-top: 1em;"
-            >
-              プランを変更する
-            </button>
-          </div>
-          <script>
-            document.addEventListener('DOMContentLoaded', function() {
-              var changePlanBtn = document.getElementById('change-plan-btn');
-              if (changePlanBtn) {
-                changePlanBtn.addEventListener('click', function() {
-                  window.location.href = 'index.html#pricing';
-                });
-              }
-            });
-          </script>
+            <div style="margin-top: 2rem; text-align: center">
+              <button
+                class="btn-primary"
+                id="change-plan-btn"
+                style="font-size: 1.1rem; padding: 0.8em 2.2em; margin-top: 1em"
+              >
+                プランを変更する
+              </button>
+            </div>
+            <script>
+              document.addEventListener("DOMContentLoaded", function () {
+                var changePlanBtn = document.getElementById("change-plan-btn");
+                if (changePlanBtn) {
+                  changePlanBtn.addEventListener("click", function () {
+                    window.location.href = "index.html#pricing";
+                  });
+                }
+              });
+            </script>
           </div>
         </div>
       </div>
@@ -376,45 +415,45 @@
 
     <!-- Footer Section -->
     <footer class="footer">
-        <div class="container">
-          <div class="footer-content">
-            <div class="footer-section">
-              <div class="footer-logo">
-                <i class="fas fa-gift"></i>
-                <span>ギフトループ</span>
-              </div>
-              <p>贈り物の新しい体験を提供するプラットフォーム</p>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <div class="footer-logo">
+              <i class="fas fa-gift"></i>
+              <span>ギフトループ</span>
             </div>
-            <div class="footer-section">
-              <h4>サービス</h4>
-              <ul>
-                <li><a href="index.html">ホーム</a></li>
-                <li><a href="shop.html">ショップ</a></li>
-                <li><a href="river.html">贈り物の川</a></li>
-              </ul>
-            </div>
-            <div class="footer-section">
-              <h4>会社情報</h4>
-              <ul>
-                <li><a href="#">プライバシーポリシー</a></li>
-                <li><a href="#">利用規約</a></li>
-                <li><a href="#">お問い合わせ</a></li>
-              </ul>
-            </div>
-            <div class="footer-section">
-              <h4>フォローする</h4>
-              <div class="social-links">
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-              </div>
-            </div>
+            <p>贈り物の新しい体験を提供するプラットフォーム</p>
           </div>
-          <div class="footer-bottom">
-            <p>&copy; 2025 ギフトループ. 無断転載を禁じます。.</p>
+          <div class="footer-section">
+            <h4>サービス</h4>
+            <ul>
+              <li><a href="index.html">ホーム</a></li>
+              <li><a href="shop.html">ショップ</a></li>
+              <li><a href="river.html">贈り物の川</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>会社情報</h4>
+            <ul>
+              <li><a href="#">プライバシーポリシー</a></li>
+              <li><a href="#">利用規約</a></li>
+              <li><a href="#">お問い合わせ</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>フォローする</h4>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
           </div>
         </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 ギフトループ。 無断転載を禁じます。</p>
+        </div>
+      </div>
     </footer>
 
     <script src="js/partials.js"></script>

@@ -46,7 +46,7 @@
 
     <section class="corp-header" style="margin-top: 4.5rem;">
       <div class="container">
-        <div class="corp-hero">
+        <div class="corp-hero" style="text-align: center;">
           <h1><i class="fas fa-building"></i> 企業管理</h1>
           <p>ギフトオファー登録・掲載期間設定・当選番号管理</p>
         </div>
@@ -162,16 +162,19 @@
             <button class="btn-primary" id="exportNumbersBtn"><i class="fas fa-file-export"></i> CSV書き出し</button>
           </div>
           <div class="admin-table-wrapper" style="margin-top:.75rem;">
-            <table class="admin-table" id="numbersTable">
-              <thead>
-                <tr>
-                  <th>番号</th>
-                  <th>状態</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
+            <div style="max-height: 320px; overflow-y: auto;">
+              <table class="admin-table" id="numbersTable">
+                <thead>
+                  <tr>
+                    <th>番号</th>
+                    <th>状態</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <div class="modal-actions">
@@ -218,7 +221,7 @@
           </div>
         </div>
         <div class="footer-bottom">
-          <p>&copy; 2025 ギフトループ. All rights reserved.</p>
+          <p>&copy; 2025 ギフトループ。 無断転載を禁じます。</p>
         </div>
       </div>
     </footer>

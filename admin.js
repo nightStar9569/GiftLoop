@@ -44,12 +44,12 @@ function initGiftsPanel() {
 
   const statusDefs = [
     { key: 'all', label: 'すべて' },
-    { key: 'created', label: '作成' },
+    { key: 'created', label: '作成済' },
     { key: 'sent', label: '送信済' },
-    { key: 'pending', label: '保留' },
+    { key: 'pending', label: '保留中' },
     { key: 'accepted', label: '受取済' },
-    { key: 'rejected', label: '拒否' },
-    { key: 'owned', label: '所有' },
+    { key: 'rejected', label: '拒否済' },
+    { key: 'owned', label: '所有済' },
   ];
   const categories = [
     { key: 'all', label: '全カテゴリ' },

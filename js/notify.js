@@ -1,52 +1,74 @@
 // Global Notification Utility
 // Use: showNotification('message', 'success' | 'error' | 'info')
 (function() {
-  function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-            <span>${message}</span>
-        </div>
-    `;
+  function getContainer() {
+    let container = document.getElementById('toastContainer');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'toastContainer';
+      container.className = 'toast-container';
+      document.body.appendChild(container);
+    }
+    return container;
+  }
 
-    const colors = {
-      success: '#10b981',
-      error: '#ef4444',
-      info: '#e91e63'
-    };
+  function iconFor(type) {
+    if (type === 'success') return 'fa-check-circle';
+    if (type === 'error') return 'fa-exclamation-circle';
+    return 'fa-info-circle';
+  }
 
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${colors[type]};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 10px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        z-index: 10000;
-        transform: translateX(400px);
-        transition: transform 0.3s ease;
-        font-weight: 600;
-        max-width: 300px;
-    `;
+  function showNotification(message, type = 'info', options = {}) {
+    const duration = Number(options.duration || 4000);
+    const container = getContainer();
 
-    document.body.appendChild(notification);
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', type === 'error' ? 'assertive' : 'polite');
 
-    setTimeout(() => {
-      notification.style.transform = 'translateX(0)';
-    }, 100);
+    const content = document.createElement('div');
+    content.className = 'toast-content';
 
-    setTimeout(() => {
-      notification.style.transform = 'translateX(400px)';
+    const icon = document.createElement('i');
+    icon.className = `fas ${iconFor(type)}`;
+
+    const text = document.createElement('span');
+    text.textContent = message;
+
+    const close = document.createElement('button');
+    close.className = 'toast-close';
+    close.setAttribute('aria-label', '閉じる');
+    close.innerHTML = '<i class="fas fa-times"></i>';
+
+    content.appendChild(icon);
+    content.appendChild(text);
+    toast.appendChild(content);
+    toast.appendChild(close);
+    container.appendChild(toast);
+
+    // animate in
+    requestAnimationFrame(() => {
+      toast.classList.add('show');
+    });
+
+    let hideTimer = setTimeout(hide, duration);
+
+    function hide() {
+      toast.classList.add('hide');
       setTimeout(() => {
-        if (document.body.contains(notification)) {
-          document.body.removeChild(notification);
-        }
-      }, 300);
-    }, 4000);
+        if (container.contains(toast)) container.removeChild(toast);
+      }, 250);
+    }
+
+    close.addEventListener('click', () => {
+      clearTimeout(hideTimer);
+      hide();
+    });
+
+    // Optional pause on hover
+    toast.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+    toast.addEventListener('mouseleave', () => hideTimer = setTimeout(hide, 1200));
   }
 
   window.showNotification = showNotification;

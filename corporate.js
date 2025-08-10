@@ -70,7 +70,7 @@ function initOfferForm() {
       id: 'offer_'+Math.random().toString(36).slice(2),
       name, category, price, isSuper, startAt, endAt, description,
       imageUrl: imageData,
-      status: 'draft', // draft | published | archived
+      status: '下書き', // 下書き | 公開中 | アーカイブ
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -161,7 +161,7 @@ function renderOffers() {
 }
 
 function mapStatusLabel(keyOrLabel) {
-  const map = { '下書き': 'draft', '公開中': 'published', 'アーカイブ': 'archived', 'draft':'draft','published':'published','archived':'archived' };
+  const map = { '下書き': '下書き', '公開中': '公開中', 'アーカイブ': 'アーカイブ', 'draft':'下書き','published':'公開中','archived':'アーカイブ' };
   return map[keyOrLabel] || 'draft';
 }
 
@@ -254,7 +254,7 @@ function initNumbersModal() {
   addBtn?.addEventListener('click', () => {
     const value = (newNumberInput.value || '').trim();
     if (!value) return;
-    upsertNumber(currentNumbersOfferId, value, 'active');
+    upsertNumber(currentNumbersOfferId, value, '未使用');
     newNumberInput.value='';
     renderNumbers();
   });
@@ -265,7 +265,7 @@ function initNumbersModal() {
     if (!count || !length) return;
     for (let i=0;i<count;i++) {
       const num = Array.from({length},()=>Math.floor(Math.random()*10)).join('');
-      upsertNumber(currentNumbersOfferId, num, 'active');
+      upsertNumber(currentNumbersOfferId, num, '未使用');
     }
     renderNumbers();
   });
@@ -275,7 +275,7 @@ function initNumbersModal() {
     if (!file) return;
     const text = await file.text();
     const rows = text.split(/\r?\n/).map(r=>r.trim()).filter(Boolean);
-    rows.forEach(r => upsertNumber(currentNumbersOfferId, r, 'active'));
+    rows.forEach(r => upsertNumber(currentNumbersOfferId, r, '未使用'));
     showNotification('CSVを取り込みました。','success');
     renderNumbers();
   });
@@ -323,7 +323,7 @@ function renderNumbers() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${n.value}</td>
-      <td>${n.status || 'active'}</td>
+      <td>${n.status || '未使用'}</td>
       <td>
         <button class="btn-primary" data-action="toggle">切替</button>
         <button class="btn-primary" data-action="delete">削除</button>
@@ -331,7 +331,7 @@ function renderNumbers() {
     tr.querySelector('[data-action="toggle"]').addEventListener('click', () => {
       const key = `corpNumbers_${currentNumbersOfferId}`;
       const arr = JSON.parse(localStorage.getItem(key) || '[]');
-      arr[i].status = arr[i].status === 'active' ? 'used' : 'active';
+      arr[i].status = arr[i].status === '未使用' ? '使用済' : '未使用';
       localStorage.setItem(key, JSON.stringify(arr));
       renderNumbers();
     });
