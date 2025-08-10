@@ -3290,3 +3290,17 @@ html {
   .send-gift-header, .receive-gift-header, .admin-header { margin-bottom: .75rem; }
   .admin-panel > * + * { margin-top: .85rem; }
 }
+
+/* Corporate Admin */
+.corp-header { background: linear-gradient(135deg, #e0f2ff 0%, #ffffff 100%); padding: 2.5rem 0 1.25rem; }
+.corp-hero h1 { font-size: 2rem; display:flex; align-items:center; gap:.5rem; }
+.corp-hero p { color:#6b7280; }
+.corp-content { padding: 1.25rem 0 3rem; }
+.corp-content .image-preview { margin-top:.5rem; }
+
+@media (max-width: 992px) {
+  .corp-hero h1 { font-size: 1.75rem; }
+}
+@media (max-width: 600px) {
+  .corp-header { padding: 2rem 0 1rem; }
+}

@@ -136,9 +136,9 @@ function initGiftsPanel() {
           </div>
         </div>
         <div class="admin-row-actions">
-          <button class="btn-secondary" data-action="view">詳細</button>
-          <button class="btn-secondary" data-action="toggle-status">状態変更</button>
-          <button class="btn-secondary" data-action="delete">削除</button>
+          <button class="btn-primary" data-action="view">詳細</button>
+          <button class="btn-primary" data-action="toggle-status">状態変更</button>
+          <button class="btn-primary" data-action="delete">削除</button>
         </div>`;
 
       row.querySelector('[data-action="delete"]').addEventListener('click', () => deleteGift(g.id));
@@ -216,7 +216,7 @@ function initCorporatePanel() {
           </div>
         </div>
         <div class="admin-row-actions">
-          <button class="btn-secondary" data-action="delete">削除</button>
+          <button class="btn-primary" data-action="delete">削除</button>
         </div>`;
       row.querySelector('[data-action="delete"]').addEventListener('click', () => {
         const next = (JSON.parse(localStorage.getItem(key) || '[]')).filter(x => x.id !== c.id);
