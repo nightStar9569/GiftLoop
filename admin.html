@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>管理者ダッシュボード - ギフトループ</title>
+    <meta name="description" content="ギフト投稿管理、会社ギフト管理、ユーザー監視を行う管理者ページ。" />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo" style="text-decoration-line: none">
+          <i class="fas fa-gift"></i>
+          <span>ギフトループ</span>
+        </a>
+        <ul class="nav-menu">
+          <li><a href="index.html" data-nav="home">ホーム</a></li>
+          <li><a href="shop.html" data-nav="shop">ショップ</a></li>
+          <li><a href="river.html" data-nav="river">贺り物のループ</a></li>
+          <li><a href="send-gift.html" data-nav="send-gift">贈り物を送る</a></li>
+          <li><a href="receive-gift.html" data-nav="receive-gift">贈り物を受け取る</a></li>
+          <li class="user-menu" style="display: none">
+            <a href="mypage.html" class="user-profile">
+              <i class="fas fa-user-circle"></i>
+              <span class="user-name">ユーザー</span>
+            </a>
+            <div class="user-dropdown">
+              <a href="mypage.html"><i class="fas fa-user"></i> マイページ</a>
+              <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> ログアウト</a>
+            </div>
+          </li>
+          <li>
+            <a href="auth.html" class="btn-login" id="login-btn">ログイン</a>
+          </li>
+        </ul>
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </nav>
+
+    <section class="admin-header" style="margin-top: 4.5rem;">
+      <div class="container">
+        <div class="admin-hero">
+          <h1><i class="fas fa-shield-alt"></i> 管理者ダッシュボード</h1>
+          <p>ギフト投稿管理・会社ギフト管理・ユーザー監視</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-content">
+      <div class="container">
+        <div class="admin-tabs">
+          <button class="admin-tab active" data-tab="gifts"><i class="fas fa-boxes"></i> ギフト管理</button>
+          <button class="admin-tab" data-tab="corporate"><i class="fas fa-building"></i> 会社ギフト</button>
+          <button class="admin-tab" data-tab="users"><i class="fas fa-users"></i> ユーザー監視</button>
+        </div>
+
+        <!-- Gifts Management -->
+        <div id="tab-gifts" class="admin-panel active">
+          <div class="admin-toolbar" style="margin-block: 2.5rem;">
+            <div class="input-wrapper">
+              <i class="fas fa-search"></i>
+              <input type="text" id="giftSearch" placeholder="ギフトを検索 (名前/カテゴリー/送受信者)">
+            </div>
+            <div class="chip-group" id="giftStatusFilters" aria-label="ステータスで絞り込む"></div>
+            <div class="chip-group" id="giftCategoryFilters" aria-label="カテゴリーで絞り込む" style="margin-block: 1.5rem;"></div>
+            <div class="sort-control">
+              <label for="giftSort">並び替え</label>
+              <select id="giftSort">
+                <option value="recent">新着</option>
+                <option value="price_desc">価格（高い順）</option>
+                <option value="price_asc">価格（安い順）</option>
+                <option value="name_asc">名前（A→Z）</option>
+              </select>
+            </div>
+          </div>
+          <div id="giftsList" class="admin-list" style="margin-block: 2.5rem;"></div>
+        </div>
+
+        <!-- Corporate Gifts -->
+        <div id="tab-corporate" class="admin-panel">
+          <div class="form-card">
+            <div class="form-header">
+              <h2><i class="fas fa-plus-circle"></i> 会社ギフトを追加</h2>
+              <p>企業向けギフトテンプレートを作成します</p>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="corpName">名称</label>
+                <input type="text" id="corpName" placeholder="例: 御中元セット">
+              </div>
+              <div class="form-group">
+                <label for="corpCategory">カテゴリー</label>
+                <select id="corpCategory">
+                  <option value="food">食品・スイーツ</option>
+                  <option value="fashion">ファッション</option>
+                  <option value="beauty">美容・コスメ</option>
+                  <option value="electronics">家電・電子機器</option>
+                  <option value="books">書籍・文具</option>
+                  <option value="hobby">趣味・スポーツ</option>
+                  <option value="home">生活用品</option>
+                  <option value="other">その他</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="corpPrice">価格 (¥)</label>
+                <input type="number" id="corpPrice" min="0" step="100" placeholder="1000">
+              </div>
+              <div class="form-group">
+                <label for="corpQuantity">数量</label>
+                <input type="number" id="corpQuantity" min="1" step="1" placeholder="50">
+              </div>
+            </div>
+            <div class="form-actions" style="justify-content: flex-end;">
+              <button id="addCorporateGift" class="btn-primary"><i class="fas fa-save"></i> 追加</button>
+            </div>
+          </div>
+
+          <div class="admin-list" id="corporateGiftsList"></div>
+        </div>
+
+        <!-- Users Monitoring -->
+        <div id="tab-users" class="admin-panel">
+          <div class="admin-toolbar" style="justify-content: space-between;">
+            <div class="stats" id="userStats"></div>
+            <div class="admin-actions">
+              <button id="exportData" class="btn-secondary"><i class="fas fa-file-export"></i> データ書き出し</button>
+              <button id="refreshData" class="btn-secondary"><i class="fas fa-rotate"></i> 更新</button>
+            </div>
+          </div>
+          <div class="admin-table-wrapper">
+            <table class="admin-table" id="usersTable">
+              <thead>
+                <tr>
+                  <th>ユーザー</th>
+                  <th>メール</th>
+                  <th>送信数</th>
+                  <th>受信数</th>
+                  <th>最終活動</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <div class="footer-logo">
+              <i class="fas fa-gift"></i>
+              <span>ギフトループ</span>
+            </div>
+            <p>贈り物の新しい体験を提供するプラットフォーム</p>
+          </div>
+          <div class="footer-section">
+            <h4>サービス</h4>
+            <ul>
+              <li><a href="index.html">ホーム</a></li>
+              <li><a href="shop.html">ショップ</a></li>
+              <li><a href="river.html">贈り物の川</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>会社情報</h4>
+            <ul>
+              <li><a href="about.html">会社概要</a></li>
+              <li><a href="#">プライバシーポリシー</a></li>
+              <li><a href="#">利用規約</a></li>
+              <li><a href="#">お問い合わせ</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>フォローする</h4>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 ギフトループ. 無断転載を禁じます。</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/partials.js"></script>
+    <script src="js/notify.js"></script>
+    <script src="js/core/App.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html> 
