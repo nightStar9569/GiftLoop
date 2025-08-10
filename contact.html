@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>お問い合わせ - ギフトループ</title>
+    <meta name="description" content="ギフトループへのお問い合わせページ。サポートやご要望をお送りください。" />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo" style="text-decoration-line: none">
+          <i class="fas fa-gift"></i>
+          <span>ギフトループ</span>
+        </a>
+        <ul class="nav-menu">
+          <li><a href="index.html">ホーム</a></li>
+          <li><a href="shop.html">ショップ</a></li>
+          <li><a href="river.html">贈り物のループ</a></li>
+          <li><a href="send-gift.html">贈り物を送る</a></li>
+          <li><a href="receive-gift.html">贈り物を受け取る</a></li>
+        </ul>
+        <div class="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </nav>
+
+    <section class="contact-header" style="margin-top: 4.5rem;">
+      <div class="container">
+        <div class="contact-hero" style="text-align: center;">
+          <h1><i class="fas fa-envelope-open-text"></i> お問い合わせ</h1>
+          <p>サポートが必要な場合やご意見・ご要望があればお知らせください。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-content">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="form-card">
+            <div class="form-header">
+              <h2><i class="fas fa-headset"></i> お問い合わせフォーム</h2>
+              <p>通常1〜2営業日以内にご返信いたします。</p>
+            </div>
+            <form id="contactForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="contactName">お名前</label>
+                  <input type="text" id="contactName" placeholder="山田 太郎" required>
+                </div>
+                <div class="form-group">
+                  <label for="contactEmail">メールアドレス</label>
+                  <input type="email" id="contactEmail" placeholder="example@example.com" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="contactSubject">件名</label>
+                <input type="text" id="contactSubject" placeholder="ご用件を簡潔にお書きください" required>
+              </div>
+              <div class="form-group">
+                <label for="contactMessage">内容</label>
+                <textarea id="contactMessage" rows="5" placeholder="お問い合わせ内容をご記入ください" required></textarea>
+              </div>
+              <div class="form-actions" style="display:flex; justify-content:center;gap:1rem;">
+                <button type="reset" class="btn-primary">クリア</button>
+                <button type="submit" class="btn-primary">送信</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="form-card">
+            <div class="form-header">
+              <h2><i class="fas fa-question-circle"></i> よくあるご質問</h2>
+              <p>お問い合わせの前にご確認ください</p>
+            </div>
+            <div class="faq-list">
+              <details>
+                <summary>ギフトを受け取れません</summary>
+                <p>ログイン状態とネットワーク状態をご確認のうえ、再度お試しください。</p>
+              </details>
+              <details>
+                <summary>スーパープレゼントとは？</summary>
+                <p>特別な限定ギフトです。アプリ内でバッジ表示されます。</p>
+              </details>
+              <details>
+                <summary>退会はできますか？</summary>
+                <p>マイページの設定からお問い合わせください。対応させていただきます。</p>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <div class="footer-logo"><i class="fas fa-gift"></i><span>ギフトループ</span></div>
+            <p>贈り物の新しい体験を提供するプラットフォーム</p>
+          </div>
+          <div class="footer-section">
+            <h4>サービス</h4>
+            <ul>
+              <li><a href="index.html">ホーム</a></li>
+              <li><a href="shop.html">ショップ</a></li>
+              <li><a href="river.html">贈り物の川</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>会社情報</h4>
+            <ul>
+              <li><a href="privacy.html">プライバシーポリシー</a></li>
+              <li><a href="terms.html">利用規約</a></li>
+              <li><a href="contact.html">お問い合わせ</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>フォローする</h4>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 ギフトループ. All rights reserved.</p></div>
+      </div>
+    </footer>
+
+    <script src="js/partials.js"></script>
+    <script src="contact.js"></script>
+  </body>
+</html> 

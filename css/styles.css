@@ -3422,3 +3422,22 @@ select[multiple], select[size] {
   .toast-container { top: 14px; width: min(94vw, 480px); }
   .toast { padding: .75rem .9rem; }
 }
+
+/* Legal & Contact pages */
+.legal-header, .contact-header { background: linear-gradient(135deg, #f3f4ff 0%, #ffffff 100%); padding: 2.5rem 0 1.25rem; }
+.legal-hero h1, .contact-hero h1 { font-size: 2rem; display:flex; align-items:center; justify-content:center; gap:.5rem; text-align:center; }
+.legal-content, .contact-content { padding: 1.25rem 0 3rem; }
+.contact-content { display: block; }
+.legal-card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:1.25rem; margin-bottom:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.04); }
+.legal-card ul { padding-left: 1.25rem; }
+.legal-meta { color:#6b7280; margin-top:.5rem; }
+
+.contact-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items:start; }
+.faq-list details { border:1px solid #e5e7eb; border-radius:10px; padding:.6rem .75rem; background:#fff; }
+.faq-list details + details { margin-top: .5rem; }
+.faq-list summary { cursor:pointer; font-weight:600; }
+
+@media (max-width: 992px) { .contact-grid { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+  .legal-header, .contact-header { padding: 2rem 0 1rem; }
+}
