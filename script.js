@@ -22,6 +22,22 @@ document.addEventListener('DOMContentLoaded', function() {
   // Demo river: mirror hero visuals
   initDemoRiver();
 
+  // Pricing buttons: redirect to payment page with selected plan
+  document.querySelectorAll('.pricing-card').forEach(card => {
+    const button = card.querySelector('.btn-pricing');
+    if (!button) return;
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      const planNameJa = card.querySelector('.pricing-header h3')?.textContent.trim() || '';
+      const priceText = card.querySelector('.pricing-header .price')?.textContent.trim() || '';
+      const planMap = { 'ベーシック': 'basic', 'プレミアム': 'premium', 'ビジネス': 'business' };
+      const planSlug = planMap[planNameJa] || 'basic';
+      const price = (priceText.match(/\d+/g) || ['0']).join('');
+      const url = `payment.html?plan=${encodeURIComponent(planSlug)}&price=${encodeURIComponent(price)}`;
+      window.location.href = url;
+    });
+  });
+
   // Contact form handling
   const contactForm = document.querySelector('.contact-form');
   if (contactForm) {

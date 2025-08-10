@@ -11,6 +11,7 @@ class App {
     init() {
         this.setupNavigation();
         this.setupCommonEventListeners();
+        this.injectBackToTop();
         this.checkLoginStatus();
         this.setupAnimations();
     }
@@ -175,6 +176,27 @@ class App {
         document.querySelectorAll('.step, .feature-card, .pricing-card, .demo-container, .contact-content').forEach(el => {
             el.classList.add('loading');
             observer.observe(el);
+        });
+    }
+
+    injectBackToTop() {
+        // Avoid duplicate
+        if (document.querySelector('.back-to-top')) return;
+        const btn = document.createElement('button');
+        btn.className = 'back-to-top';
+        btn.setAttribute('aria-label', 'ページ上部へ戻る');
+        btn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+        document.body.appendChild(btn);
+
+        const onScroll = () => {
+            const show = window.scrollY > 300;
+            btn.classList.toggle('show', show);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        btn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 

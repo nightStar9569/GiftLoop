@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>お支払い - ギフトループ</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo" style="text-decoration-line: none;">
+          <i class="fas fa-gift"></i>
+          <span>ギフトループ</span>
+        </a>
+        <ul class="nav-menu">
+          <li><a href="index.html" data-nav="home">ホーム</a></li>
+          <li><a href="shop.html" data-nav="shop">ショップ</a></li>
+          <li><a href="river.html" data-nav="river">贈り物のループ</a></li>
+          <li><a href="send-gift.html" data-nav="send-gift">贈り物を送る</a></li>
+          <li><a href="receive-gift.html" data-nav="receive-gift">贈り物を受け取る</a></li>
+          <li class="user-menu" style="display: none">
+            <a href="mypage.html" class="user-profile">
+              <i class="fas fa-user-circle"></i>
+              <span class="user-name">ユーザー</span>
+            </a>
+            <div class="user-dropdown">
+              <a href="mypage.html"><i class="fas fa-user"></i> マイページ</a>
+              <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> ログアウト</a>
+            </div>
+          </li>
+          <li>
+            <a href="auth.html" class="btn-login" id="login-btn">ログイン</a>
+          </li>
+        </ul>
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </nav>
+
+    <section class="payment-section" style="padding: 120px 0 60px; background: #f8fafc;">
+      <div class="container">
+        <div class="payment-card" style="max-width: 700px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); overflow: hidden;">
+          <div class="payment-header" style="padding: 1.25rem 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h2 style="margin: 0; font-size: 1.25rem; text-align: center;">お支払い</h2>
+          </div>
+          <div class="payment-content" style="padding: 1.5rem;">
+            <div class="summary" style="display: flex; align-items: center; justify-content: space-between; background: #f9fafb; border: 1px solid #eef2f7; border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem;">
+              <div>
+                <div style="font-weight: 700; font-size: 1.1rem;">選択したプラン</div>
+                <div id="selectedPlanLabel" style="color: #6b7280; margin-top: 2px;">-</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 0.9rem; color: #6b7280;">お支払い金額</div>
+                <div id="selectedPriceLabel" style="font-weight: 800; font-size: 1.4rem; color: #111827;">¥0</div>
+              </div>
+            </div>
+
+            <form id="paymentForm" class="payment-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div style="grid-column: span 2;">
+                <label style="display:block; font-weight:600; margin-bottom: 6px;">カード番号</label>
+                <input type="text" inputmode="numeric" autocomplete="cc-number" placeholder="4242 4242 4242 4242" style="width:100%; padding: 0.85rem 1rem; border: 2px solid #e5e7eb; border-radius: 10px;" required />
+              </div>
+              <div>
+                <label style="display:block; font-weight:600; margin-bottom: 6px;">有効期限 (MM/YY)</label>
+                <input type="text" inputmode="numeric" placeholder="12/34" style="width:100%; padding: 0.85rem 1rem; border: 2px solid #e5e7eb; border-radius: 10px;" required />
+              </div>
+              <div>
+                <label style="display:block; font-weight:600; margin-bottom: 6px;">CVC</label>
+                <input type="text" inputmode="numeric" placeholder="123" style="width:100%; padding: 0.85rem 1rem; border: 2px solid #e5e7eb; border-radius: 10px;" required />
+              </div>
+              <div style="grid-column: span 2;">
+                <label style="display:block; font-weight:600; margin-bottom: 6px;">名義人</label>
+                <input type="text" placeholder="TARO YAMADA" style="width:100%; padding: 0.85rem 1rem; border: 2px solid #e5e7eb; border-radius: 10px;" required />
+              </div>
+              <div style="grid-column: span 2; display:flex; align-items:center; gap:.5rem;">
+                <input id="agree" type="checkbox" required />
+                <label for="agree" style="font-size: 0.9rem; color: #6b7280;">利用規約とプライバシーポリシーに同意します。</label>
+              </div>
+              <div style="grid-column: span 2; margin-top: .5rem; display:flex; gap:.75rem; justify-content:center;">
+                <button type="submit" class="btn-primary">支払う</button>
+                <button type="button" onclick="window.history.back();" class="btn-primary" style="text-align:center">戻る</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <div class="footer-logo">
+              <i class="fas fa-gift"></i>
+              <span>ギフトループ</span>
+            </div>
+            <p>贈り物の新しい体験を提供するプラットフォーム</p>
+          </div>
+          <div class="footer-section">
+            <h4>サービス</h4>
+            <ul>
+              <li><a href="index.html">ホーム</a></li>
+              <li><a href="shop.html">ショップ</a></li>
+              <li><a href="river.html">贈り物の川</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>会社情報</h4>
+            <ul>
+              <li><a href="#">プライバシーポリシー</a></li>
+              <li><a href="#">利用規約</a></li>
+              <li><a href="#">お問い合わせ</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>フォローする</h4>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 ギフトループ. 無断転載を禁じます。</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/partials.js"></script>
+    <script src="js/core/App.js"></script>
+    <script src="payment.js"></script>
+  </body>
+</html> 

@@ -1563,6 +1563,8 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
   margin-bottom: 2rem;
+  justify-items: center;
+  text-align: center;
 }
 
 .footer-logo {
@@ -1571,6 +1573,7 @@ body {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  justify-content: center;
 }
 
 .footer-logo i {
@@ -1586,6 +1589,8 @@ body {
 
 .footer-section ul {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .footer-section ul li {
@@ -1605,6 +1610,7 @@ body {
 .social-links {
   display: flex;
   gap: 1rem;
+  justify-content: center;
 }
 
 .social-links a {
@@ -3017,4 +3023,39 @@ html {
 /* Slightly different path for super gifts */
 .hero-visual .floating-gift.super {
   animation: floatDownSuper 16s linear infinite;
+}
+
+/* Back to Top Button */
+.back-to-top {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: #e91e63;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease;
+}
+.back-to-top:hover {
+  background: #c2185b;
+}
+.back-to-top.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.back-to-top i {
+  pointer-events: none;
 }

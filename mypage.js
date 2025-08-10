@@ -40,6 +40,14 @@ document.addEventListener('DOMContentLoaded', function() {
 function loadUserData() {
     const userData = JSON.parse(localStorage.getItem('userData') || '{}');
     
+    // Sync membership from payment subscription if present
+    const subscriptionPlan = (localStorage.getItem('subscriptionPlan') || '').toLowerCase();
+    const subscriptionPrice = localStorage.getItem('subscriptionPrice') || '0';
+    if (subscriptionPlan === 'premium' || subscriptionPlan === 'business' || subscriptionPlan === 'basic') {
+        userData.membershipLevel = subscriptionPlan;
+        localStorage.setItem('userData', JSON.stringify(userData));
+    }
+    
     // Update profile information
     const profileName = document.querySelector('.profile-name');
     const profileEmail = document.querySelector('.profile-email');
@@ -74,16 +82,25 @@ function loadUserData() {
         giftsSentElement.textContent = userData.giftsSent || 0;
     }
     
-    // Update membership level
+    // Update membership level badge
     const membershipBadge = document.querySelector('.membership-badge span');
+    const level = userData.membershipLevel || 'basic';
+    const levelText = {
+        'basic': 'ベーシック会員',
+        'premium': 'プレミアム会員',
+        'business': 'ビジネス会員'
+    };
     if (membershipBadge) {
-        const level = userData.membershipLevel || 'basic';
-        const levelText = {
-            'basic': 'ベーシック会員',
-            'premium': 'プレミアム会員',
-            'business': 'ビジネス会員'
-        };
         membershipBadge.textContent = levelText[level] || 'ベーシック会員';
+    }
+
+    // Update current plan card in membership tab
+    const currentPlanNameEl = document.querySelector('.plan-card.current .plan-header h3');
+    const currentPlanPriceEl = document.querySelector('.plan-card.current .plan-header .plan-price');
+    if (currentPlanNameEl) currentPlanNameEl.textContent = (level === 'premium' ? 'プレミアム' : level === 'business' ? 'ビジネス' : 'ベーシック');
+    if (currentPlanPriceEl) {
+        const priceDisplay = (level === 'premium' || level === 'business') ? `¥${Number(subscriptionPrice || '0').toLocaleString()}<span>/月</span>` : '¥0<span>/月</span>';
+        currentPlanPriceEl.innerHTML = priceDisplay;
     }
     
     // Populate profile form
