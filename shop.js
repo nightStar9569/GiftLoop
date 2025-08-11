@@ -183,8 +183,9 @@ function updateCartDisplay() {
                 <div class="cart-item-name">${item.name}</div>
                 <div class="cart-item-price">¥${item.price.toLocaleString()} × ${item.quantity}</div>
             </div>
-            <button class="remove-item" data-product-id="${item.id}">
-                <i class="fas fa-times"></i>
+            <button class="remove-item" data-product-id="${item.id}" aria-label="${item.name}をカートから削除" title="削除">
+                <i class="fas fa-times" aria-hidden="true"></i>
+                <span class="sr-only">${item.name}を削除</span>
             </button>
         `;
         

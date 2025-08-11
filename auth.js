@@ -104,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const confirmPassword = this.querySelector('#register-confirm-password').value;
             const birthDate = this.querySelector('#register-birthdate').value;
             const terms = this.querySelector('input[name="terms"]').checked;
-            const newsletter = this.querySelector('input[name="newsletter"]').checked;
             
             // Validation
             if (!firstName || !lastName || !email || !password || !confirmPassword || !birthDate) {
@@ -143,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     points: 100,
                     giftsReceived: 0,
                     giftsSent: 0,
-                    newsletter: newsletter,
                     isLoggedIn: true
                 };
                 
