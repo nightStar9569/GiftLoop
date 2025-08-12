@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Login form handling
     if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
+        loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const email = this.querySelector('#login-email').value;
@@ -54,28 +54,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Simulate login process
+            // Check if giftApi is available
+            if (typeof giftApi === 'undefined') {
+                showNotification('APIサービスが利用できません。ページを再読み込みしてください。', 'error');
+                return;
+            }
+            
             showNotification('ログイン中...', 'info');
             
-            // Simulate API call
-            setTimeout(() => {
-                // For demo purposes, accept any email/password combination
-                const userData = {
-                    id: generateUserId(),
-                    email: email,
-                    firstName: email.split('@')[0],
-                    lastName: 'ユーザー',
-                    birthDate: '1990-01-01',
-                    joinDate: new Date().toISOString(),
-                    membershipLevel: 'basic',
-                    points: 100,
-                    giftsReceived: 0,
-                    giftsSent: 0,
-                    isLoggedIn: true
-                };
+            try {
+                const { user, token } = await giftApi.login({ email, password });
                 
-                // Store user data
-                localStorage.setItem('userData', JSON.stringify(userData));
+                // Store user data and token
+                localStorage.setItem('userData', JSON.stringify(user));
+                localStorage.setItem('authToken', token);
                 localStorage.setItem('isLoggedIn', 'true');
                 
                 if (remember) {
@@ -87,14 +79,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Redirect to my page after a short delay
                 setTimeout(() => {
                     window.location.href = 'mypage.html';
-                }, 1500);
-            }, 2000);
+                }, 800);
+            } catch (err) {
+                showNotification(err.message || 'ログインに失敗しました。', 'error');
+            }
         });
     }
 
     // Register form handling
     if (registerForm) {
-        registerForm.addEventListener('submit', function(e) {
+        registerForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const firstName = this.querySelector('#register-firstname').value;
@@ -126,27 +120,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Simulate registration process
+            // Check if giftApi is available
+            if (typeof giftApi === 'undefined') {
+                showNotification('APIサービスが利用できません。ページを再読み込みしてください。', 'error');
+                return;
+            }
+            
             showNotification('アカウントを作成中...', 'info');
             
-            // Simulate API call
-            setTimeout(() => {
-                const userData = {
-                    id: generateUserId(),
-                    email: email,
-                    firstName: firstName,
-                    lastName: lastName,
-                    birthDate: birthDate,
-                    joinDate: new Date().toISOString(),
-                    membershipLevel: 'basic',
-                    points: 100,
-                    giftsReceived: 0,
-                    giftsSent: 0,
-                    isLoggedIn: true
-                };
+            try {
+                const { user, token } = await giftApi.register({
+                    email,
+                    password,
+                    firstName,
+                    lastName,
+                    birthDate,
+                });
                 
-                // Store user data
-                localStorage.setItem('userData', JSON.stringify(userData));
+                // Store user data and token
+                localStorage.setItem('userData', JSON.stringify(user));
+                localStorage.setItem('authToken', token);
                 localStorage.setItem('isLoggedIn', 'true');
                 
                 showNotification('アカウントが正常に作成されました！', 'success');
@@ -154,8 +147,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Redirect to my page after a short delay
                 setTimeout(() => {
                     window.location.href = 'mypage.html';
-                }, 1500);
-            }, 2000);
+                }, 800);
+            } catch (err) {
+                showNotification(err.message || '登録に失敗しました。', 'error');
+            }
         });
     }
 
@@ -171,9 +166,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Forgot password link
     const forgotPasswordLink = document.querySelector('.forgot-password');
     if (forgotPasswordLink) {
-        forgotPasswordLink.addEventListener('click', function(e) {
+        forgotPasswordLink.addEventListener('click', async function(e) {
             e.preventDefault();
-            showNotification('パスワードリセット機能は現在開発中です。', 'info');
+            
+            const email = document.querySelector('#login-email').value;
+            if (!email) {
+                showNotification('メールアドレスを入力してください。', 'error');
+                return;
+            }
+            
+            if (typeof giftApi === 'undefined') {
+                showNotification('APIサービスが利用できません。ページを再読み込みしてください。', 'error');
+                return;
+            }
+            
+            try {
+                await giftApi.forgotPassword(email);
+                showNotification('パスワードリセット用のメールを送信しました。メールボックスを確認してください。', 'success');
+            } catch (err) {
+                showNotification(err.message || 'パスワードリセットに失敗しました。', 'error');
+            }
         });
     }
 });
